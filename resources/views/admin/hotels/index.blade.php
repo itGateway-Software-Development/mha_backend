@@ -13,6 +13,7 @@
             @can('hotel_create')
                 <div style="margin-bottom: 10px;" class="row">
                     <div class="col-lg-12">
+                        <button data-bs-toggle="modal" data-bs-target="#excelImport" type="button" class="btn btn-warning">Import</button>
                         <a class="btn success-btn" href="{{ route('admin.hotels.create') }}?zone={{ $zoneName }}">
                             {{ trans('global.add') }} {{ trans('cruds.hotel.title_singular') }}
                         </a>
@@ -20,6 +21,30 @@
                 </div>
             @endcan
         </div>
+
+        <!-- excel import popup -->
+        <div class="modal fade" id="excelImport" tabindex="-1" aria-hidden="true">
+            <div class=" modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title fw-bold" id="exampleModalLabel4">Hotels Import</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="hotelImportForm">
+                            <div class="form-group mb-4">
+                                <label for="">Excel to import</label>
+                                <input type="file" class="form-control mt-2 import_file" name="import_file"
+                                    accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            </div>
+                            <button class="btn btn-warning">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- excel import popup -->
 
         <div class="card-body">
             <div class="table-responsive">
@@ -148,5 +173,47 @@
                 return false;
             }
         }
+
+        $(document).ready(function() {
+            //submit excel import file
+            $(document).on("submit", "#hotelImportForm", function (e) {
+                e.preventDefault();
+
+                let file = $('.import_file').val();
+
+                if(file == null || file == '') {
+                    warning_alert('Please import file');
+                    return;
+                }
+
+                let formData = new FormData($("#hotelImportForm")[0]);
+
+                if (formData) {
+                    $.ajax({
+                        url: "/admin/hotels-import",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        success: function (res) {
+                            if (res == "success") {
+                                $("#excelImport").modal("hide");
+                                toast_success("Succefully Imported");
+                                setTimeout(() => location.reload(), 1000);
+                            } else if (res == "fail") {
+                                toast_error("Something wrong !");
+                            } else {
+                                toast_error(res);
+                            }
+                        },
+                    });
+                }
+            });
+        })
     </script>
 @endsection

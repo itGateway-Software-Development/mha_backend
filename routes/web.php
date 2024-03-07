@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('{zone}/hotels', 'HotelsController@hotelsByZone')->name('hotels.byzone');
     Route::post('zoneSelect', 'HotelsController@zoneSelect')->name('zone.select');
     Route::post('subzoneSelect', 'HotelsController@subzoneSelect')->name('subzone.select');
+    Route::post('hotels-import', 'HotelsController@importHotels');
     Route::resource('hotels', 'HotelsController');
 
     //News

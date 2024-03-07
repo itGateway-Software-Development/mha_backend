@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Imports\ImportHotel;
 use App\Models\Zone;
 use App\Models\Hotel;
 use App\Models\SubZone;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreHotelsRequest;
 use App\Http\Requests\UpdateHotelsRequest;
@@ -49,6 +51,22 @@ class HotelsController extends Controller
         $zoneName = $request->zone;
 
         return view('admin.hotels.create', compact('zones', 'sub_zones', 'zoneName'));
+    }
+
+    public function importHotels(Request $request) {
+
+        if ($request->file('import_file')) {
+            $file = $request->file('import_file');
+
+            if ($file->getClientOriginalExtension() == 'xlsx') {
+                $response = Excel::import(new ImportHotel, $file->store('files'));
+                return 'success';
+            } else {
+                return 'Invalid file type. Please upload only Excel files.';
+            }
+        } else {
+            return 'fail';
+        }
     }
 
     /**

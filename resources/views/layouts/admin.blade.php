@@ -46,7 +46,6 @@
     <link rel="stylesheet" href="{{ asset('frestui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('frestui/assets/vendor/css/pages/app-invoice.css') }}" />
 
-
     {{-- custom --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @yield('styles')
@@ -220,14 +219,20 @@
     <script src="{{ asset('frestui/assets/js/offcanvas-add-payment.js') }}"></script>
     <script src="{{ asset('frestui/assets/js/offcanvas-send-invoice.js') }}"></script>
     <script src="{{ asset('frestui/assets/js/app-invoice-edit.js') }}"></script>
-    <!-- Main JS -->
-    <script src="{{ asset('frestui/assets/js/main.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Page JS -->
     <script src="{{ asset('frestui/assets/js/cards-statistics.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
+
+    <!-- Main JS -->
+    <script src="{{ asset('frestui/assets/js/main.js') }}"></script>
+    <script src="{{asset('js/sweetalert.js')}}"></script>
+
     <script>
         $(document).ready(function() {
             $("#searchInput").on("keyup", () => {
