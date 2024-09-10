@@ -155,7 +155,11 @@ class HotelsController extends Controller
      */
     public function destroy(Hotel $hotel)
     {
-        //
+        Storage::disk('public')->delete('images/'. $hotel->image);
+        $hotel->delete();
+
+        return back();
+
     }
 
 
