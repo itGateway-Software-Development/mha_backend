@@ -15,10 +15,12 @@ class NewsController extends Controller
      */
     public function index(Request $request)
     {
+        logger($request->all());
         $month = $request->month;
+        $year = $request->year;
 
         if($month == 'all') {
-            $news = News::with('newsImages')->get();
+            $news = News::with('newsImages')->whereYear('date', $year)->get();
 
             return response()->json([
                 'status' => true,
@@ -29,7 +31,7 @@ class NewsController extends Controller
             $timestamp = strtotime('1 '.$month.' 2023');
             $monthNumber = date('n', $timestamp);
 
-            $news = News::with('newsImages')->whereRaw('MONTH(date) = ?', [$monthNumber])->get();
+            $news = News::with('newsImages')->whereRaw('MONTH(date) = ?', [$monthNumber])->whereYear('date', $year)->get();
 
             return response()->json([
                 'status' => true,
